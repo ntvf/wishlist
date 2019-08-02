@@ -1,0 +1,17 @@
+html, body {
+    margin: 5px;
+    padding: 0;
+}
+
+.hidden {
+    display : none;
+}
+
+.submit-block {
+    margin-top: 3%;
+}
+
+.list-group-item.active {
+    background-color : #007bff4a;
+    border-color : #f8f9fab8;
+}

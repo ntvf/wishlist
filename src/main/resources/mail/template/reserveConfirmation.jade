@@ -1,0 +1,12 @@
+doctype html
+html
+  body
+    div
+      Підтвердіть обрані подарунки:
+      ol#items
+        for item in items
+          li #{item.name} <br> #{item.description}
+      p
+        span
+            Натиснувши&nbsp;
+        a(href="#{activationLink}") сюди

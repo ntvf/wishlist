@@ -1,0 +1,72 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue-toasted"></script>
+    <script src="https://unpkg.com/vue-router"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>
+        0 День Народження Льва
+    </title>
+</head>
+<body>
+<div id="app">
+    <div class="container-fluid justify-content-start">
+        <h3 v-bind:class="{ hidden: allItemsReserved() }">Клацніть на речі що ви хочете подарувати</h3>
+        <h3 v-bind:class="{ hidden: !allItemsReserved() }">Дякуємо, всі речі рарезервовані</h3>
+        <div id="wishlist" class="list-group">
+            <a v-for="item in items" class="list-group-item list-group-item list-group-item-action"
+               v-bind:class="{ active: item.isActive && !isReserved(item),  reserved: isReserved(item) }"
+               v-bind:key="item.id"
+               @click="$set(item, 'isActive', !item.isActive && !isReserved(item) && !isClosed(item))"
+            >
+                {{ item.name }}<br/>
+                {{ item.description }}
+                <div v-bind:class="{hidden : !isReserved(item)}">
+                    <small class="form-text text-muted">
+                        В процесі підтвердження
+                    </small>
+                </div>
+                <div v-bind:class="{hidden : !isClosed(item)}">
+                    <small class="form-text text-muted">
+                        Зарезервовано
+                    </small>
+                </div>
+            </a>
+        </div>
+        <div v-bind:class="{ hidden: !anyItemSelected() }" class="submit-block">
+            <div class="form-group">
+                <label for="exampleInputEmail">Ваш email:</label>
+                <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
+                       v-model="emailToSubmit"
+                       placeholder="Введіть email">
+                <small id="emailHelp" class="form-text text-muted">Ми надішлем посилання з підтвердженням на вашу
+                    електронну
+                    пошту
+                </small>
+            </div>
+            <div>
+                <button @click="submitItems()" type="button" class="btn btn-primary btn-lg" v-bind:class="{ disabled: confirmInProgress }">
+                    <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true" v-bind:class="{ hidden: !confirmInProgress }">&nbsp;</span>
+                    Підтвердити
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="index.js"></script>
+
+</body>
+</html>
