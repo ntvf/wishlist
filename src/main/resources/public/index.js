@@ -8,7 +8,15 @@ var router = new VueRouter({
 
 Vue.use(Toasted)
 
+
 var closedStatus = "CLOSED";
+
+var urlify = function urlify(text) {
+        var urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, function(url) {
+            return '<a href="' + url + '" target="_blank">' + url + '</a>';
+        })
+    }
 
 var app = new Vue({
     router,
@@ -16,19 +24,26 @@ var app = new Vue({
     data: {
         items: [],
         emailToSubmit: "",
-        confirmInProgress: false
+        confirmInProgress: false,
+        preloadCompleted: false
     },
     methods:{
             loadItems: function() {
                 axios.get('/wishItems')
                 .then(response => {
-                    this.items = response.data
-                    debugger;
+                    this.items = response.data;
+                    for(var i=0 ; i < this.items.length; i++) {
+                        var originalDescription = this.items[i].description;
+                        if(originalDescription) {
+                            this.items[i].description = urlify(originalDescription)
+                        }
+                    }
+                    this.preloadCompleted = true;
                     if (this.$route.query.reservationSuccess === "true") {
                         this.$toasted.show("✅Речі були зарезервовані за вами", {
                     	     theme: "toasted-primary",
                     	    position: "top-center",
-                    	    duration : 9000
+                    	    duration : 7000
                         });
                     }
                 })
